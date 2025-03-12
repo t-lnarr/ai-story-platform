@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Yeni Hikâye{% endblock %}
+{% block content %}
+    <h1 class="mb-4">Yeni Hikâye Başlat</h1>
+    <form method="post" class="card p-4">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label">Başlık</label>
+            <input type="text" name="title" class="form-control" placeholder="Hikâye başlığı">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Tür</label>
+            <input type="text" name="genre" class="form-control" placeholder="Bilimkurgu, macera vb.">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Maksimum Katılımcı</label>
+            <input type="number" name="max_contributors" class="form-control" value="5" min="1">
+        </div>
+        <button type="submit" class="btn btn-custom">Oluştur</button>
+        <a href="{% url 'story_list' %}" class="btn btn-secondary ms-2">Geri Dön</a>
+    </form>
+{% endblock %}

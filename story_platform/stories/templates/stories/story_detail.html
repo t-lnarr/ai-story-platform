@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}{{ story.title }}{% endblock %}
+{% block content %}
+    <h1 class="mb-4">{{ story.title }}</h1>
+    <div class="card mb-4">
+        <div class="card-body">
+            <p><strong>Tür:</strong> {{ story.genre }}</p>
+            <p><strong>Katılımcılar:</strong> {{ contributions.count }} / {{ story.max_contributors }}</p>
+        </div>
+    </div>
+
+    <h2 class="mt-4">Katkılar</h2>
+  <div class="row">
+      {% for contribution in contributions %}
+          <div class="col-md-6 col-sm-12 mb-3">
+              <div class="card">
+                  <div class="card-body">
+                      <p class="card-text">{{ contribution.user_input }}</p>
+                      <small class="text-muted">by {{ contribution.user.username }} - {{ contribution.added_at|date:"d M Y" }}</small>
+                  </div>
+              </div>
+          </div>
+      {% empty %}
+          <p>Henüz katkı yok.</p>
+      {% endfor %}
+  </div>
+
+    {% if contributions.count < story.max_contributors %}
+        <form method="post" class="card p-4 mt-4">
+            {% csrf_token %}
+            <div class="mb-3">
+                <input type="text" name="user_input" class="form-control" placeholder="Rastgele bir bilgi ekle (max 200 karakter)" maxlength="200">
+            </div>
+            <button type="submit" class="btn btn-custom">Ekle</button>
+        </form>
+    {% endif %}
+
+    {% if story_text %}
+    <h2 class="mt-5">Hikâye</h2>
+    <div class="card p-4">
+        {% if story_image %}
+            <img src="{{ story_image.url }}" alt="{{ story.title }}" class="img-fluid mb-3" style="max-width: 100%; border-radius: 10px;">
+        {% endif %}
+        <p class="story-text">{{ story_text|linebreaks }}</p>
+        <p><strong>Beğeni:</strong> {{ story.likes.count }}</p>
+        <form method="post" action="{% url 'add_like' story.id %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-custom">❤️ Beğen</button>
+        </form>
+    </div>
+
+        <h3 class="mt-4">Yorumlar</h3>
+        <div class="row">
+            {% for comment in story.comments.all %}
+                <div class="col-md-6 col-sm-12 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <p>{{ comment.text }}</p>
+                            <small class="text-muted">by {{ comment.user.username }} - {{ comment.created_at }}</small>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>Henüz yorum yok.</p>
+            {% endfor %}
+        </div>
+
+        <form method="post" action="{% url 'add_comment' story.id %}" class="card p-4 mt-4">
+            {% csrf_token %}
+            <div class="mb-3">
+                <textarea name="comment_text" class="form-control" placeholder="Yorum ekle" maxlength="500" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-custom">Yorum Yap</button>
+        </form>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Çıkış Yap{% endblock %}
+{% block content %}
+    <h1 class="mb-4">Çıkış Yap</h1>
+    <div class="card p-4">
+        <p>Çıkış yapmak istediğine emin misin?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-custom">Evet, Çıkış Yap</button>
+            <a href="{% url 'story_list' %}" class="btn btn-secondary ms-2">Hayır, Geri Dön</a>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Hikâyeler{% endblock %}
+{% block content %}
+    <h1 class="mb-4">Devam Eden Hikâyeler</h1>
+    <div class="row">
+        {% for story in ongoing_stories %}
+            <div class="col-md-4 col-sm-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="{% url 'story_detail' story.id %}" class="text-light">{{ story.title }}</a></h5>
+                        <p class="card-text">Tür: {{ story.genre }}</p>
+                        <p class="card-text">Katılımcılar: {{ story.contribution_set.count }} / {{ story.max_contributors }}</p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>Henüz devam eden hikâye yok.</p>
+        {% endfor %}
+    </div>
+
+    <h1 class="mb-4 mt-5">Tamamlanmış Hikâyeler</h1>
+    <div class="row">
+        {% for story in completed_stories %}
+            <div class="col-md-4 col-sm-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="{% url 'story_detail' story.id %}" class="text-light">{{ story.title }}</a></h5>
+                        <p class="card-text">Tür: {{ story.genre }}</p>
+                        <p class="card-text">Beğeni: {{ story.likes.count }} | Yorum: {{ story.comments.count }}</p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>Henüz tamamlanmış hikâye yok.</p>
+        {% endfor %}
+    </div>
+
+    <a href="{% url 'new_story' %}" class="btn btn-custom mt-3">Yeni Hikâye Başlat</a>
+{% endblock %}
